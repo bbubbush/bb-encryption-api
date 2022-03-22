@@ -1,5 +1,6 @@
 package com.bb.encryption.dto.req;
 
+import com.bb.encryption.type.EncryptType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,4 +15,6 @@ import javax.validation.constraints.NotBlank;
 public class EncryptAesReqDto {
   @NotBlank
   private String planeText;
+
+  private EncryptType encryptType;
 }

@@ -28,7 +28,5 @@ class DecryptServiceTest {
 
     // then
     assertEquals(expectedText, decodingText);
-
-
   }
 }

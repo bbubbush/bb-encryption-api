@@ -113,6 +113,7 @@ fabric.properties
 ### Java ###
 # Compiled class file
 *.class
+build/
 
 # Log file
 *.log
@@ -138,4 +139,7 @@ replay_pid*
 
 ### Spring ###
 *.yaml
+
+### Gradle ###
+.gradle/
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
