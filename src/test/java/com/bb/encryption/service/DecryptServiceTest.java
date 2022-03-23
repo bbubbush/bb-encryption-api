@@ -12,19 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 class DecryptServiceTest {
   @Autowired
+  private EncryptService encryptService;
+  @Autowired
   private DecryptService decryptService;
 
   @Test
   public void decryptCase01() {
     // given
     final String expectedText = "bbubbush";
-    DecryptAesReqDto param = DecryptAesReqDto
-      .builder()
-      .encodingText("+7LQejMEkauHPHRrZQ9uKA==\n")
-      .build();
+    String encodingText = encryptService.encodeAes(expectedText);
 
     // when
-    String decodingText = decryptService.decodeAes(param.getEncodingText());
+    String decodingText = decryptService.decodeAes(encodingText);
 
     // then
     assertEquals(expectedText, decodingText);
