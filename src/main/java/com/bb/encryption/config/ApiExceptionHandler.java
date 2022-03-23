@@ -32,4 +32,9 @@ public class ApiExceptionHandler {
     }
     return ResponseModel.fail(ResponseCode.DECRYPTION_ERROR);
   }
+
+  @ExceptionHandler(Exception.class)
+  public <T> ResponseModel<T> exceptionHandler() {
+    return ResponseModel.fail(ResponseCode.SERVER_ERROR);
+  }
 }
