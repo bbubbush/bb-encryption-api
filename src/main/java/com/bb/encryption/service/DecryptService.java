@@ -1,6 +1,6 @@
 package com.bb.encryption.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.bb.encryption.dto.req.DecryptAesReqDto;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -13,12 +13,13 @@ import java.security.Key;
 
 @Service
 public class DecryptService {
-  @Value("${aes.private-key}")
-  private String secretKey;
 
-  public String decodeAes(String encodingText) {
+  public String decodeAes(DecryptAesReqDto param) {
+    return this.decodeAes(param.getEncodingText(), param.getSecretKey());
+  }
+
+  public String decodeAes(String encodingText, String secretKey) {
     String decodingText = "";
-
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       String iv = secretKey.substring(0, 16);

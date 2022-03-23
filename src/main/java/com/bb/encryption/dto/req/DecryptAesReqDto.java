@@ -1,9 +1,6 @@
-package com.bb.encryption.dto.res;
+package com.bb.encryption.dto.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,7 +8,10 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class DecryptAesReqDto {
   @NotBlank
   private String encodingText;
+  @NotBlank
+  private String secretKey;
 }

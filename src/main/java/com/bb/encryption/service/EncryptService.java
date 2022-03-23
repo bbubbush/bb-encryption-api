@@ -1,6 +1,6 @@
 package com.bb.encryption.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.bb.encryption.dto.req.EncryptAesReqDto;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -17,19 +17,21 @@ import java.security.NoSuchAlgorithmException;
 
 @Service
 public class EncryptService {
-  @Value("${aes.private-key}")
-  private String secretKey;
 
-  public String encodeAes(String planeText) {
+  public String encodeAes(EncryptAesReqDto param) {
+    return this.encodeAes(param.getPlaneText(), param.getSecretKey());
+  }
+
+  public String encodeAes(String planeText, String secretKey) {
     String encryptText = "";
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
       String iv = secretKey.substring(0, 16);
       cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8)));
-      byte[] encrypted = cipher.doFinal(planeText.getBytes("UTF-8"));
+      byte[] encrypted = cipher.doFinal(planeText.getBytes(StandardCharsets.UTF_8));
       encryptText = DatatypeConverter.printBase64Binary(encrypted);
-    } catch (GeneralSecurityException | UnsupportedEncodingException e) {
+    } catch (GeneralSecurityException e) {
       e.printStackTrace();
       throw new RuntimeException("암호화 중 오류가 발생했습니다.");
     }
