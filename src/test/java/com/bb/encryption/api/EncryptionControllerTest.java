@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasLength;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,7 +30,7 @@ class EncryptionControllerTest {
   @Test
   public void encryptAesCase01() throws Exception {
     // given
-    final String expectedText = "안녕하세요 반가워요 잘있어요 다시 ";
+    final String expectedText = "안녕하세요 반가워요 잘있어요 다시";
     final String secretKey = "bbubbush!@#$%^&*";
     EncryptAesReqDto param = EncryptAesReqDto
       .builder()
@@ -50,7 +49,6 @@ class EncryptionControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(content().string(hasLength(encodingText.length())))
       .andExpect(content().string(containsString(encodingText)))
     ;
   }

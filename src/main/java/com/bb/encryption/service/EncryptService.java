@@ -1,13 +1,13 @@
 package com.bb.encryption.service;
 
 import com.bb.encryption.dto.req.EncryptAesReqDto;
+import com.bb.encryption.exception.EncryptException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -32,8 +32,7 @@ public class EncryptService {
       byte[] encrypted = cipher.doFinal(planeText.getBytes(StandardCharsets.UTF_8));
       encryptText = DatatypeConverter.printBase64Binary(encrypted);
     } catch (GeneralSecurityException e) {
-      e.printStackTrace();
-      throw new RuntimeException("암호화 중 오류가 발생했습니다.");
+      throw new EncryptException(e);
     }
     return encryptText;
   }
@@ -43,10 +42,10 @@ public class EncryptService {
     String cryptMakeCheckSum = "";
     try {
       md = MessageDigest.getInstance("SHA-512");
-      md.update(makeCheckSum.getBytes("UTF-8"));
+      md.update(makeCheckSum.getBytes(StandardCharsets.UTF_8));
       cryptMakeCheckSum = String.format("%128x", new BigInteger(1, md.digest()));
-    } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-      throw new RuntimeException("검증값 확인 중 오류가 발생했습니다.");
+    } catch (NoSuchAlgorithmException e) {
+      throw new EncryptException(e);
     }
     return cryptMakeCheckSum;
   }

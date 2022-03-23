@@ -1,6 +1,7 @@
 package com.bb.encryption.service;
 
 import com.bb.encryption.dto.req.DecryptAesReqDto;
+import com.bb.encryption.exception.DecryptException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -31,8 +32,7 @@ public class DecryptService {
 
       decodingText = new String(decrypted);
     } catch (GeneralSecurityException e) {
-      e.printStackTrace();
-      throw new RuntimeException("복호화 중 오류가 발생했습니다.");
+      throw new DecryptException(e);
     }
     return decodingText;
   }
