@@ -1,46 +1,41 @@
 package com.bb.encryption.service;
 
-import com.bb.encryption.dto.req.DecryptAesReqDto;
-import com.bb.encryption.dto.req.EncryptAesReqDto;
+import com.bb.encryption.vo.req.DecryptAesReqVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class DecryptServiceTest {
+  private final String PLANE_TEXT = "안녕하세요 반가워요 잘있어요 다시 만나요";
+  private final String SECRET_KEY = "bbubbush!@#$%^&*";
   @Autowired
   private EncryptService encryptService;
   @Autowired
   private DecryptService decryptService;
 
+  /* SECRET_KEY가 변경되면 테스트가 실패할 수 있음 */
   @Test
-  public void decryptCase01() {
+  public void decryptAesCase01() {
     // given
-    final String expectedText = "안녕하세요 반가워요 잘있어요 다시";
-    final String secretKey = "bbubbush!@#$%^&*";
-    EncryptAesReqDto encryptParam = EncryptAesReqDto
-      .builder()
-      .planeText(expectedText)
-      .secretKey(secretKey)
-      .build();
-    String encodingText = encryptService.encodeAes(encryptParam);
+    final String encodingText = "Y+Qx8ykqfFrRlGzkRSfSDhA9TLrxV7gnBs2dgTNni/HXfuDgwFT5PYNbVUB939lDMjGrnXqscdsiyvsPjynOHg==";
 
-    DecryptAesReqDto decryptParam = DecryptAesReqDto
+    DecryptAesReqVO decryptParam = DecryptAesReqVO
       .builder()
       .encodingText(encodingText)
-      .secretKey(secretKey)
+      .secretKey(this.SECRET_KEY)
       .build();
 
     // when
-    System.out.println(encryptParam);
-    System.out.println(decryptParam);
     String decodingText = decryptService.decodeAes(decryptParam);
 
     // then
-    assertEquals(expectedText, decodingText);
+    assertNotNull(decodingText);
+    assertNotEquals(encodingText, decodingText);
+    assertEquals(this.PLANE_TEXT, decodingText);
   }
 }

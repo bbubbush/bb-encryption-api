@@ -1,4 +1,4 @@
-package com.bb.encryption.dto.req;
+package com.bb.encryption.vo.req;
 
 import lombok.*;
 
@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DecryptAesReqDto {
+public class EncryptAesReqVO {
   @NotBlank
-  private String encodingText;
+  private String planeText;
   @NotBlank
   private String secretKey;
 }

@@ -1,27 +1,30 @@
 package com.bb.encryption.service;
 
-import com.bb.encryption.dto.req.EncryptAesReqDto;
+import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptShaReqVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class EncryptServiceTest {
+  private final String PLANE_TEXT = "안녕하세요 반가워요 잘있어요 다시 만나요";
   @Autowired
   private EncryptService encryptService;
 
+
   @Test
-  public void encryptCase01() {
+  public void encryptAesCase01() {
     // given
-    final String expectedText = "안녕하세요 반가워요 잘있어요 다시";
     final String secretKey = "bbubbush!@#$%^&*";
-    EncryptAesReqDto param = EncryptAesReqDto
+    EncryptAesReqVO param = EncryptAesReqVO
       .builder()
-      .planeText(expectedText)
+      .planeText(this.PLANE_TEXT)
       .secretKey(secretKey)
       .build();
 
@@ -30,6 +33,22 @@ class EncryptServiceTest {
 
     // then
     assertNotNull(encodingText);
-    assertNotEquals(expectedText, encodingText);
+    assertNotEquals(this.PLANE_TEXT, encodingText);
+  }
+
+  @Test
+  public void encryptSha512Case01() {
+    // given
+    EncryptShaReqVO param = EncryptShaReqVO
+      .builder()
+      .planeText(this.PLANE_TEXT)
+      .build();
+
+    // when
+    String encodingText = encryptService.encodeSha512(param);
+
+    // then
+    assertNotNull(encodingText);
+    assertNotEquals(this.PLANE_TEXT, encodingText);
   }
 }

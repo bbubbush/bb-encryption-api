@@ -1,14 +1,15 @@
 package com.bb.encryption.api;
 
-import com.bb.encryption.vo.req.EncryptAesReqVO;
-import com.bb.encryption.vo.req.EncryptShaReqVO;
-import com.bb.encryption.service.EncryptService;
+import com.bb.encryption.vo.req.DecryptAesReqVO;
+import com.bb.encryption.service.DecryptService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -16,24 +17,24 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(EncryptionController.class)
-class EncryptionControllerTest {
-  private final String PLANE_TEXT = "안녕하세요 반가워요 잘있어요 다시 만나요";
+@WebMvcTest(DecryptionController.class)
+@Import(HttpEncodingAutoConfiguration.class)
+class DecryptionControllerTest {
+  private final String ENCODING_TEXT = "Y+Qx8ykqfFrRlGzkRSfSDhA9TLrxV7gnBs2dgTNni/HXfuDgwFT5PYNbVUB939lDMjGrnXqscdsiyvsPjynOHg==";
   private final String SECRET_KEY = "bbubbush!@#$%^&*";
-
   @Autowired
   private WebApplicationContext webApplicationContext;
   @Autowired
   private ObjectMapper objectMapper;
   @MockBean
-  private EncryptService service;
+  private DecryptService service;
 
   private MockMvc mockMvc;
 
@@ -46,49 +47,26 @@ class EncryptionControllerTest {
   }
 
   @Test
-  public void encryptAesCase01() throws Exception {
+  public void decryptAesCase01() throws Exception {
     // given
-    EncryptAesReqVO param = EncryptAesReqVO
+    DecryptAesReqVO param = DecryptAesReqVO
       .builder()
-      .planeText(this.PLANE_TEXT)
+      .encodingText(this.ENCODING_TEXT)
       .secretKey(this.SECRET_KEY)
       .build();
-    final String encodingText = "Y+Qx8ykqfFrRlGzkRSfSDhA9TLrxV7gnBs2dgTNni/HXfuDgwFT5PYNbVUB939lDMjGrnXqscdsiyvsPjynOHg==";
+    final String decodingText = "안녕하세요 반가워요 잘있어요 다시 만나요";
 
     // when
-    when(service.encodeAes(any(EncryptAesReqVO.class))).thenReturn(encodingText);
+    when(service.decodeAes(any(DecryptAesReqVO.class))).thenReturn(decodingText);
 
     // then
     this.mockMvc
-      .perform(post("/api/enc/aes")
-            .content(objectMapper.writeValueAsString(param))
-            .contentType(MediaType.APPLICATION_JSON))
-      .andDo(print())
-      .andExpect(status().isOk())
-      .andExpect(content().string(containsString(encodingText)))
-    ;
-  }
-
-  @Test
-  public void encryptSha512Case01() throws Exception {
-    // given
-    EncryptShaReqVO param = EncryptShaReqVO
-      .builder()
-      .planeText(this.PLANE_TEXT)
-      .build();
-    final String encodingText = "e72e84f429955c237e7ec4b7ad071ee1eee33dd27c2854448693b70bbc623ead426c91d922b7ebfa6ffa0d29be907d42358c35809389d3e1c95a3c7ff0ae1643";
-
-    // when
-    when(service.encodeSha512(any(EncryptShaReqVO.class))).thenReturn(encodingText);
-
-    // then
-    this.mockMvc
-      .perform(post("/api/enc/sha/512")
+      .perform(post("/api/dec/aes")
         .content(objectMapper.writeValueAsString(param))
         .contentType(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(content().string(containsString(encodingText)))
+      .andExpect(content().string(containsString(decodingText)))
     ;
   }
 }

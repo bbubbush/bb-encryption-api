@@ -1,8 +1,9 @@
 package com.bb.encryption.api;
 
-import com.bb.encryption.dto.req.EncryptAesReqDto;
-import com.bb.encryption.model.common.ApiResponse;
-import com.bb.encryption.model.common.ResponseModel;
+import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptShaReqVO;
+import com.bb.encryption.util.ApiResponse;
+import com.bb.encryption.vo.common.ResponseVO;
 import com.bb.encryption.service.EncryptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api/aes")
+@RequestMapping(value = "/api/enc")
 @RequiredArgsConstructor
 public class EncryptionController {
   private final EncryptService encryptService;
 
-  @PostMapping("/enc")
-  public ResponseModel encryptAes(@RequestBody @Valid EncryptAesReqDto param) {
+  @PostMapping("/aes")
+  public ResponseVO<String> encryptAes(@RequestBody @Valid EncryptAesReqVO param) {
     return ApiResponse.of(encryptService.encodeAes(param));
+  }
+  @PostMapping("/sha/512")
+  public ResponseVO<String> encryptSha512(@RequestBody @Valid EncryptShaReqVO param) {
+    return ApiResponse.of(encryptService.encodeSha512(param));
   }
 }

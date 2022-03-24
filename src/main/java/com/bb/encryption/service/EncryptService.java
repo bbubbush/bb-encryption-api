@@ -1,6 +1,7 @@
 package com.bb.encryption.service;
 
-import com.bb.encryption.dto.req.EncryptAesReqDto;
+import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptShaReqVO;
 import com.bb.encryption.exception.EncryptException;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,12 @@ import java.security.NoSuchAlgorithmException;
 @Service
 public class EncryptService {
 
-  public String encodeAes(EncryptAesReqDto param) {
+  public String encodeAes(EncryptAesReqVO param) {
     return this.encodeAes(param.getPlaneText(), param.getSecretKey());
   }
 
-  public String encodeAes(String planeText, String secretKey) {
-    String encryptText = "";
+  private String encodeAes(String planeText, String secretKey) {
+    String encryptText;
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -37,16 +38,16 @@ public class EncryptService {
     return encryptText;
   }
 
-  public String encodingSha512(String makeCheckSum) {
-    MessageDigest md = null;
-    String cryptMakeCheckSum = "";
+  public String encodeSha512(EncryptShaReqVO param) {
+    String planeText = param.getPlaneText();
+    String encryptText;
     try {
-      md = MessageDigest.getInstance("SHA-512");
-      md.update(makeCheckSum.getBytes(StandardCharsets.UTF_8));
-      cryptMakeCheckSum = String.format("%128x", new BigInteger(1, md.digest()));
+      MessageDigest md = MessageDigest.getInstance("SHA-512");
+      md.update(planeText.getBytes(StandardCharsets.UTF_8));
+      encryptText = String.format("%128x", new BigInteger(1, md.digest()));
     } catch (NoSuchAlgorithmException e) {
       throw new EncryptException(e);
     }
-    return cryptMakeCheckSum;
+    return encryptText;
   }
 }
