@@ -1,5 +1,7 @@
 package com.bb.encryption.api;
 
+import com.bb.encryption.code.ResponseCode;
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.DecryptAesReqVO;
 import com.bb.encryption.util.ApiResponse;
 import com.bb.encryption.vo.common.ResponseVO;
@@ -20,6 +22,9 @@ public class DecryptionController {
 
   @PostMapping("/aes")
   public ResponseVO<String> decryptAes(@RequestBody @Valid DecryptAesReqVO param) {
+    if (param.getType().equals(AesType.EMPTY)) {
+      return ApiResponse.fail(ResponseCode.INVALID_MODE_ERROR);
+    }
     return ApiResponse.of(decryptService.decodeAes(param));
   }
 }

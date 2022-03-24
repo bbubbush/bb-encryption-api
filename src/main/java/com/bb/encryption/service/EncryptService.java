@@ -1,6 +1,7 @@
 package com.bb.encryption.service;
 
 import com.bb.encryption.exception.EncryptException;
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,14 @@ public class EncryptService {
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       Cipher cipher = Cipher.getInstance(param.getType().getValue());
-      String iv = secretKey.substring(0, 16);
-      cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8)));
+
+      // 암호화 타입에 맞게 분리
+      if (AesType.CBC.equals(param.getType())) {
+        String iv = secretKey.substring(0, 16);
+        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8)));
+      } else if (AesType.ECB.equals(param.getType())) {
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+      }
       byte[] encrypted = cipher.doFinal(planeText.getBytes(StandardCharsets.UTF_8));
       encryptText = DatatypeConverter.printBase64Binary(encrypted);
     } catch (GeneralSecurityException e) {

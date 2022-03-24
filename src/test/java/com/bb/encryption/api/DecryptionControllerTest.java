@@ -1,5 +1,6 @@
 package com.bb.encryption.api;
 
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.DecryptAesReqVO;
 import com.bb.encryption.service.DecryptService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,7 @@ class DecryptionControllerTest {
       .builder()
       .encodingText(this.ENCODING_TEXT)
       .secretKey(this.SECRET_KEY)
+      .type(AesType.CBC)
       .build();
     final String decodingText = "안녕하세요 반가워요 잘있어요 다시 만나요";
 

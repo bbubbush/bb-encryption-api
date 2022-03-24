@@ -1,5 +1,6 @@
 package com.bb.encryption.service;
 
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.DecryptAesReqVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ class DecryptServiceTest {
       .builder()
       .encodingText(encodingText)
       .secretKey(this.SECRET_KEY)
+      .type(AesType.CBC)
       .build();
 
     // when
