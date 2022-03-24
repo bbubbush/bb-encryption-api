@@ -1,5 +1,6 @@
 package com.bb.encryption.api;
 
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import com.bb.encryption.service.EncryptService;
@@ -52,6 +53,7 @@ class EncryptionControllerTest {
       .builder()
       .planeText(this.PLANE_TEXT)
       .secretKey(this.SECRET_KEY)
+      .type(AesType.CBC)
       .build();
     final String encodingText = "Y+Qx8ykqfFrRlGzkRSfSDhA9TLrxV7gnBs2dgTNni/HXfuDgwFT5PYNbVUB939lDMjGrnXqscdsiyvsPjynOHg==";
 

@@ -1,8 +1,8 @@
 package com.bb.encryption.service;
 
+import com.bb.encryption.exception.EncryptException;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
-import com.bb.encryption.exception.EncryptException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -20,14 +20,12 @@ import java.security.NoSuchAlgorithmException;
 public class EncryptService {
 
   public String encodeAes(EncryptAesReqVO param) {
-    return this.encodeAes(param.getPlaneText(), param.getSecretKey());
-  }
-
-  private String encodeAes(String planeText, String secretKey) {
+    String planeText = param.getPlaneText();
+    String secretKey = param.getSecretKey();
     String encryptText;
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
-      Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+      Cipher cipher = Cipher.getInstance(param.getType().getValue());
       String iv = secretKey.substring(0, 16);
       cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8)));
       byte[] encrypted = cipher.doFinal(planeText.getBytes(StandardCharsets.UTF_8));

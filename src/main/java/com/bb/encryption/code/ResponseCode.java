@@ -6,6 +6,8 @@ public enum ResponseCode {
   , ENCRYPTION_ERROR("502", "암호화 중 오류가 발생했습니다.")
   , DECRYPTION_ERROR("503", "복호화 중 오류가 발생했습니다.")
   , BAD_KEY_ERROR("504", "복호화 중 오류가 발생했습니다. 입력하신 비밀키를 확인하시기 바랍니다.")
+  , INVALID_MODE_ERROR("505", "유효하지 않은 암호화방식 입니다.")
+  , NOT_VALID_ERROR("506", "필수값을 입력해주세요.")
   , SERVER_ERROR("555", "알 수 없는 오류가 발생했습니다. 관리자에게 문의하세요.")
 
   ;

@@ -16,11 +16,9 @@ import java.security.Key;
 public class DecryptService {
 
   public String decodeAes(DecryptAesReqVO param) {
-    return this.decodeAes(param.getEncodingText(), param.getSecretKey());
-  }
-
-  private String decodeAes(String encodingText, String secretKey) {
     String decodingText;
+    String encodingText = param.getEncodingText();
+    String secretKey = param.getSecretKey();
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       String iv = secretKey.substring(0, 16);

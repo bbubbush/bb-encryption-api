@@ -1,5 +1,6 @@
 package com.bb.encryption.service;
 
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ class EncryptServiceTest {
       .builder()
       .planeText(this.PLANE_TEXT)
       .secretKey(secretKey)
+      .type(AesType.CBC)
       .build();
 
     // when

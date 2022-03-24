@@ -1,5 +1,7 @@
 package com.bb.encryption.api;
 
+import com.bb.encryption.code.ResponseCode;
+import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import com.bb.encryption.util.ApiResponse;
@@ -21,6 +23,9 @@ public class EncryptionController {
 
   @PostMapping("/aes")
   public ResponseVO<String> encryptAes(@RequestBody @Valid EncryptAesReqVO param) {
+    if (param.getType().equals(AesType.EMPTY)) {
+      return ApiResponse.fail(ResponseCode.INVALID_MODE_ERROR);
+    }
     return ApiResponse.of(encryptService.encodeAes(param));
   }
   @PostMapping("/sha/512")
