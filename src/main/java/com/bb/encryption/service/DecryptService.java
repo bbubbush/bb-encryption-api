@@ -35,7 +35,7 @@ public class DecryptService {
       byte[] parseBase64Binary = DatatypeConverter.parseBase64Binary(encodingText);
       byte[] decrypted = cipher.doFinal(parseBase64Binary);
 
-      decodingText = new String(decrypted);
+      decodingText = new String(decrypted, StandardCharsets.UTF_8);
     } catch (GeneralSecurityException e) {
       throw new DecryptException(e);
     }

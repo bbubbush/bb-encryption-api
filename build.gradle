@@ -26,6 +26,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+bootJar {
+    mainClass = 'com.bb.encryption.BbEncryptionApplication'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

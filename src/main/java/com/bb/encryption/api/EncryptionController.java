@@ -8,16 +8,14 @@ import com.bb.encryption.util.ApiResponse;
 import com.bb.encryption.vo.common.ResponseVO;
 import com.bb.encryption.service.EncryptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/enc")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class EncryptionController {
   private final EncryptService encryptService;
 
