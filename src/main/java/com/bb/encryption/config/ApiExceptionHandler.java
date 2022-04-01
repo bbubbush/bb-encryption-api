@@ -15,6 +15,7 @@ public class ApiExceptionHandler {
   private final String INVALID_KEY_MESSAGE = "java.security.InvalidKeyException";
   private final String BAD_KEY_MESSAGE = "javax.crypto.BadPaddingException";
   private final String INVALID_TYPE_MESSAGE = "InvalidEncryptTypeException";
+  private final String NO_SUCH_ALGORITHM_MESSAGE = "java.security.NoSuchAlgorithmException";
 
   @ExceptionHandler(EncryptException.class)
   public <T> ResponseVO<T> encryptExceptionHandler(EncryptException e) {
@@ -23,6 +24,8 @@ public class ApiExceptionHandler {
       return ResponseVO.fail(ResponseCode.KEY_LENGTH_ERROR);
     } else if (e.getMessage().contains(INVALID_TYPE_MESSAGE)) {
       return ResponseVO.fail(ResponseCode.INVALID_MODE_ERROR);
+    } else if (e.getMessage().contains(NO_SUCH_ALGORITHM_MESSAGE)) {
+      return ResponseVO.fail(ResponseCode.NO_SUCH_ALGORITHM_ERROR);
     }
     return ResponseVO.fail(ResponseCode.ENCRYPTION_ERROR);
   }

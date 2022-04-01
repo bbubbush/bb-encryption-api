@@ -68,7 +68,7 @@ public class EncryptService {
 //        encryptText = String.format("%02x", new BigInteger(1, md.digest()));
 //      }
       encryptText = String.format("%128x", new BigInteger(1, md.digest())).trim();
-    } catch (NoSuchAlgorithmException e) {
+가    } catch (GeneralSecurityException e) {
       throw new EncryptException(e);
     }
     return encryptText;
