@@ -3,6 +3,7 @@ package com.bb.encryption.vo.req;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -12,4 +13,6 @@ import javax.validation.constraints.NotBlank;
 public class EncryptShaReqVO {
   @NotBlank
   private String planeText;
+  @NotNull
+  private String type;
 }

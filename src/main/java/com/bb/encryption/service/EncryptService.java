@@ -43,16 +43,35 @@ public class EncryptService {
     return encryptText;
   }
 
-  public String encodeSha512(EncryptShaReqVO param) {
+//  public String encodeSha512(EncryptShaReqVO param) {
+//    String planeText = param.getPlaneText();
+//    String encryptText;
+//    try {
+//      MessageDigest md = MessageDigest.getInstance("SHA-512");
+//      md.update(planeText.getBytes(StandardCharsets.UTF_8));
+//      encryptText = String.format("%128x", new BigInteger(1, md.digest()));
+//    } catch (NoSuchAlgorithmException e) {
+//      throw new EncryptException(e);
+//    }
+//    return encryptText;
+//  }
+  public String encodeSha(EncryptShaReqVO param) {
     String planeText = param.getPlaneText();
-    String encryptText;
+    String encryptText = "";
+    String shaType = param.getType();
     try {
-      MessageDigest md = MessageDigest.getInstance("SHA-512");
+      MessageDigest md = MessageDigest.getInstance(shaType);
       md.update(planeText.getBytes(StandardCharsets.UTF_8));
-      encryptText = String.format("%128x", new BigInteger(1, md.digest()));
+//      if(shaType.equals("SHA-512")) {
+//        encryptText = String.format("%128x", new BigInteger(1, md.digest()));
+//      } else {
+//        encryptText = String.format("%02x", new BigInteger(1, md.digest()));
+//      }
+      encryptText = String.format("%128x", new BigInteger(1, md.digest())).trim();
     } catch (NoSuchAlgorithmException e) {
       throw new EncryptException(e);
     }
     return encryptText;
   }
+
 }
