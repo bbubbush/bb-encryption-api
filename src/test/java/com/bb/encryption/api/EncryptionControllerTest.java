@@ -77,15 +77,16 @@ class EncryptionControllerTest {
     EncryptShaReqVO param = EncryptShaReqVO
       .builder()
       .planeText(this.PLANE_TEXT)
+      .type("SHA-512")
       .build();
     final String encodingText = "e72e84f429955c237e7ec4b7ad071ee1eee33dd27c2854448693b70bbc623ead426c91d922b7ebfa6ffa0d29be907d42358c35809389d3e1c95a3c7ff0ae1643";
 
     // when
-    when(service.encodeSha512(any(EncryptShaReqVO.class))).thenReturn(encodingText);
+    when(service.encodeSha(any(EncryptShaReqVO.class))).thenReturn(encodingText);
 
     // then
     this.mockMvc
-      .perform(post("/api/enc/sha/512")
+      .perform(post("/api/enc/sha")
         .content(objectMapper.writeValueAsString(param))
         .contentType(MediaType.APPLICATION_JSON))
       .andDo(print())

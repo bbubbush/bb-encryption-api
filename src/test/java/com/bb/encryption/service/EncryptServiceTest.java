@@ -44,10 +44,11 @@ class EncryptServiceTest {
     EncryptShaReqVO param = EncryptShaReqVO
       .builder()
       .planeText(this.PLANE_TEXT)
+      .type("SHA-512")
       .build();
 
     // when
-    String encodingText = encryptService.encodeSha512(param);
+    String encodingText = encryptService.encodeSha(param);
 
     // then
     assertNotNull(encodingText);

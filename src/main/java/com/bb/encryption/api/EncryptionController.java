@@ -8,10 +8,12 @@ import com.bb.encryption.util.ApiResponse;
 import com.bb.encryption.vo.common.ResponseVO;
 import com.bb.encryption.service.EncryptService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/enc")
 @RequiredArgsConstructor
