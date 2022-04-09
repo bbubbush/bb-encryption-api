@@ -7,9 +7,13 @@ import com.bb.encryption.service.ExceptionLogService;
 import com.bb.encryption.vo.common.ResponseVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.validation.UnexpectedTypeException;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -42,14 +46,20 @@ public class ApiExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public <T> ResponseVO<T> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-    String filedName = e.getBindingResult()
+    String defaultMessage = e.getBindingResult()
       .getAllErrors()
-      .get(0)
-      .getObjectName();
-
-    String errorMsg = ResponseCode.NOT_VALID_ERROR.getMessage() + " [" + filedName + "]";
+      .stream()
+      .map(ObjectError::getDefaultMessage)
+      .collect(Collectors.joining(", "))
+      ;
+    String errorMsg = ResponseCode.NOT_VALID_ERROR.getMessage() + " [" + defaultMessage + "]";
     exceptionLogService.insertLogMessage(errorMsg);
     return ResponseVO.fail(ResponseCode.NOT_VALID_ERROR.getCode(), errorMsg);
+  }
+
+  @ExceptionHandler(UnexpectedTypeException.class)
+  public <T> ResponseVO<T> unexpectedTypeExceptionHandler(UnexpectedTypeException e) {
+    return insertExceptionLog(ResponseCode.NOT_VALID_ERROR);
   }
 
   @ExceptionHandler(Exception.class)

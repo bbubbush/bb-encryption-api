@@ -6,6 +6,7 @@ import com.bb.encryption.type.AesType;
 import com.bb.encryption.util.ApiResponse;
 import com.bb.encryption.vo.common.ResponseVO;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptBCryptReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +37,10 @@ public class EncryptionController {
       return ApiResponse.fail(ResponseCode.INVALID_MODE_ERROR);
     }
     return ApiResponse.of(encryptService.encodeSha(param));
+  }
+
+  @PostMapping("/bcrypt")
+  public ResponseVO<String> encryptBCrypt(@RequestBody @Valid EncryptBCryptReqVO param) {
+    return ApiResponse.of(encryptService.encodeBcrypt(param));
   }
 }

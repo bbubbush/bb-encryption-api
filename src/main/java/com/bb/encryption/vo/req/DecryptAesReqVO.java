@@ -13,11 +13,11 @@ import java.util.Arrays;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DecryptAesReqVO {
-  @NotBlank
+  @NotBlank(message = "encodingText 값은 필수입니다.")
   private String encodingText;
-  @NotBlank
+  @NotBlank(message = "secretKey 값은 필수입니다.")
   private String secretKey;
-  @NotNull
+  @NotNull(message = "type 값은 필수입니다.")
   private AesType type;
 
   public void setType(String type) {

@@ -4,8 +4,10 @@ import com.bb.encryption.entity.EncryptDataLog;
 import com.bb.encryption.exception.EncryptException;
 import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptBCryptReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 @Transactional
 public class EncryptService {
   private final EncryptDataLogService encryptDataLogService;
+  private final String BCRYPT_TYPE = "BCrypt";
 
   public String encodeAes(EncryptAesReqVO param) {
     String planeText = param.getPlaneText();
@@ -69,6 +72,18 @@ public class EncryptService {
     }
     EncryptDataLog encryptDataLog = EncryptDataLog.builder()
       .encrytType(param.getType())
+      .planeText(param.getPlaneText())
+      .encodingText(encodingText)
+      .build();
+    this.insertSuccessAes(encryptDataLog);
+    return encodingText;
+  }
+
+  public String encodeBcrypt(EncryptBCryptReqVO param) {
+    String encodingText = new BCryptPasswordEncoder(param.getStrength()).encode(param.getPlaneText());
+
+    EncryptDataLog encryptDataLog = EncryptDataLog.builder()
+      .encrytType(BCRYPT_TYPE)
       .planeText(param.getPlaneText())
       .encodingText(encodingText)
       .build();

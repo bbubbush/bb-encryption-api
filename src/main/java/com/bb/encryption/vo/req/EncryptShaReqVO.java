@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EncryptShaReqVO {
-  @NotBlank
+  @NotBlank(message = "planeText 값은 필수입니다.")
   private String planeText;
-  @NotNull
+  @NotNull(message = "type 값은 필수입니다.")
   private String type;
 }
