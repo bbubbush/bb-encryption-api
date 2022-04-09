@@ -13,13 +13,12 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class ExceptionLog extends BaseEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String msg;
 
   @Builder
-  public ExceptionLog(Long id, String msg) {
-    this.id = id;
+  public ExceptionLog(String msg) {
     this.msg = msg;
   }
 }

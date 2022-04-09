@@ -1,12 +1,12 @@
 package com.bb.encryption.api;
 
 import com.bb.encryption.code.ResponseCode;
+import com.bb.encryption.service.EncryptService;
 import com.bb.encryption.type.AesType;
-import com.bb.encryption.vo.req.EncryptAesReqVO;
-import com.bb.encryption.vo.req.EncryptShaReqVO;
 import com.bb.encryption.util.ApiResponse;
 import com.bb.encryption.vo.common.ResponseVO;
-import com.bb.encryption.service.EncryptService;
+import com.bb.encryption.vo.req.EncryptAesReqVO;
+import com.bb.encryption.vo.req.EncryptShaReqVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +28,7 @@ public class EncryptionController {
     }
     return ApiResponse.of(encryptService.encodeAes(param));
   }
-//  @PostMapping("/sha/512")
-//  public ResponseVO<String> encryptSha512(@RequestBody @Valid EncryptShaReqVO param) {
-//    return ApiResponse.of(encryptService.encodeSha512(param));
-//  }
+
   @PostMapping("/sha")
   public ResponseVO<String> encryptSha(@RequestBody @Valid EncryptShaReqVO param) {
     String type = param.getType();
@@ -40,6 +37,4 @@ public class EncryptionController {
     }
     return ApiResponse.of(encryptService.encodeSha(param));
   }
-
-
 }

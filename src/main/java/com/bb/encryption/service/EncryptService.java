@@ -1,10 +1,13 @@
 package com.bb.encryption.service;
 
+import com.bb.encryption.entity.EncryptDataLog;
 import com.bb.encryption.exception.EncryptException;
 import com.bb.encryption.type.AesType;
 import com.bb.encryption.vo.req.EncryptAesReqVO;
 import com.bb.encryption.vo.req.EncryptShaReqVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -18,12 +21,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class EncryptService {
+  private final EncryptDataLogService encryptDataLogService;
 
   public String encodeAes(EncryptAesReqVO param) {
     String planeText = param.getPlaneText();
     String secretKey = param.getSecretKey();
-    String encryptText;
+    String encodingText;
     try {
       Key key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       Cipher cipher = Cipher.getInstance(param.getType().getValue());
@@ -36,42 +42,41 @@ public class EncryptService {
         cipher.init(Cipher.ENCRYPT_MODE, key);
       }
       byte[] encrypted = cipher.doFinal(planeText.getBytes(StandardCharsets.UTF_8));
-      encryptText = DatatypeConverter.printBase64Binary(encrypted);
+      encodingText = DatatypeConverter.printBase64Binary(encrypted);
     } catch (GeneralSecurityException e) {
       throw new EncryptException(e);
     }
-    return encryptText;
+    EncryptDataLog encryptDataLog = EncryptDataLog.builder()
+      .encrytType(param.getType().getValue())
+      .planeText(param.getPlaneText())
+      .secretKey(param.getSecretKey())
+      .encodingText(encodingText)
+      .build();
+    this.insertSuccessAes(encryptDataLog);
+    return encodingText;
   }
 
-//  public String encodeSha512(EncryptShaReqVO param) {
-//    String planeText = param.getPlaneText();
-//    String encryptText;
-//    try {
-//      MessageDigest md = MessageDigest.getInstance("SHA-512");
-//      md.update(planeText.getBytes(StandardCharsets.UTF_8));
-//      encryptText = String.format("%128x", new BigInteger(1, md.digest()));
-//    } catch (NoSuchAlgorithmException e) {
-//      throw new EncryptException(e);
-//    }
-//    return encryptText;
-//  }
   public String encodeSha(EncryptShaReqVO param) {
     String planeText = param.getPlaneText();
-    String encryptText = "";
+    String encodingText = "";
     String shaType = param.getType();
     try {
       MessageDigest md = MessageDigest.getInstance(shaType);
       md.update(planeText.getBytes(StandardCharsets.UTF_8));
-//      if(shaType.equals("SHA-512")) {
-//        encryptText = String.format("%128x", new BigInteger(1, md.digest()));
-//      } else {
-//        encryptText = String.format("%02x", new BigInteger(1, md.digest()));
-//      }
-      encryptText = String.format("%128x", new BigInteger(1, md.digest())).trim();
+      encodingText = String.format("%128x", new BigInteger(1, md.digest())).trim();
     } catch (NoSuchAlgorithmException e) {
       throw new EncryptException(e);
     }
-    return encryptText;
+    EncryptDataLog encryptDataLog = EncryptDataLog.builder()
+      .encrytType(param.getType())
+      .planeText(param.getPlaneText())
+      .encodingText(encodingText)
+      .build();
+    this.insertSuccessAes(encryptDataLog);
+    return encodingText;
   }
 
+  private Long insertSuccessAes(EncryptDataLog encryptDataLog) {
+    return encryptDataLogService.insertEncryptData(encryptDataLog);
+  }
 }

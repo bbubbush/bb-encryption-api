@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,6 +21,7 @@ class EncryptServiceTest {
 
 
   @Test
+  @Transactional
   public void encryptAesCase01() {
     // given
     final String secretKey = "bbubbush!@#$%^&*";
@@ -39,6 +41,7 @@ class EncryptServiceTest {
   }
 
   @Test
+  @Transactional
   public void encryptSha512Case01() {
     // given
     EncryptShaReqVO param = EncryptShaReqVO
