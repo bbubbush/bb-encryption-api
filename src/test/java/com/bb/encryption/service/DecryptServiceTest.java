@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class DecryptServiceTest {
   private final String PLANE_TEXT = "안녕하세요 반가워요 잘있어요 다시 만나요";
   private final String SECRET_KEY = "bbubbush!@#$%^&*";
@@ -22,7 +23,6 @@ class DecryptServiceTest {
 
   /* SECRET_KEY가 변경되면 테스트가 실패할 수 있음 */
   @Test
-  @Transactional
   public void decryptAesCase01() {
     // given
     final String encodingText = "Y+Qx8ykqfFrRlGzkRSfSDhA9TLrxV7gnBs2dgTNni/HXfuDgwFT5PYNbVUB939lDMjGrnXqscdsiyvsPjynOHg==";

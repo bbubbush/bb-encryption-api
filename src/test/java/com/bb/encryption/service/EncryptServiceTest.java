@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 class EncryptServiceTest {
   private final String PLANE_TEXT = "안녕하세요 반가워요 잘있어요 다시 만나요";
   @Autowired
@@ -21,7 +22,6 @@ class EncryptServiceTest {
 
 
   @Test
-  @Transactional
   public void encryptAesCase01() {
     // given
     final String secretKey = "bbubbush!@#$%^&*";
@@ -41,7 +41,6 @@ class EncryptServiceTest {
   }
 
   @Test
-  @Transactional
   public void encryptSha512Case01() {
     // given
     EncryptShaReqVO param = EncryptShaReqVO
