@@ -15,7 +15,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
@@ -66,7 +65,7 @@ public class EncryptService {
     try {
       MessageDigest md = MessageDigest.getInstance(shaType);
       md.update(planeText.getBytes(StandardCharsets.UTF_8));
-      encodingText = String.format("%128x", new BigInteger(1, md.digest())).trim();
+      encodingText = DatatypeConverter.printBase64Binary(md.digest());
     } catch (NoSuchAlgorithmException e) {
       throw new EncryptException(e);
     }
